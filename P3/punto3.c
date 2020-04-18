@@ -18,19 +18,22 @@ int main(int argc, char *argv[])
         printf("Indica el nombre de un fichero.\n");
         exit(0);
     }
-    pthread_create(&tid, NULL, cuenta, &argv[1]);
+    
+    pthread_create(&tid, NULL, &cuenta, (void *)argv[1]);
     pthread_join(tid, NULL);
 
 }
 
-void *cuenta(void* nombre)
+void *cuenta(void *nombre)
 {
+    char *name = (char *)nombre;
     int pos, cont= 0, leidos;
     char cadena[MAXLON];
     int fd;
-    fd= open(nombre,O_RDONLY);
+    fd= open(name,O_RDONLY);
+   
     while ((leidos =read(fd,cadena,MAXLON))!= 0) {
-        printf(" %d\n", leidos);
+        
         for (pos= 0; pos< leidos; pos++) {
         if ((cadena[pos]== 'a') || (cadena[pos]== 'A')) {
             cont++;
@@ -39,5 +42,5 @@ void *cuenta(void* nombre)
     }
     printf("Fichero %s: %d caracteres 'a' o 'A' encontrados\n", nombre, cont);
     close(fd);
-    return NULL;
+    pthread_exit(NULL);
 }
