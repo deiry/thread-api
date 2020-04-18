@@ -5,28 +5,34 @@ El hilo principal deberá esperar a que terminen los otros dos hilos.
 Recuerda  añadir el parámetro ```-lpthread``` al comienzo del ```gcc``` 
 para compilar la aplicación multihilo.*/
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
-#include<time.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <pthread.h>
 
-long long int factorial (int);
+void *factorial (void *dato) {
+  long long int resultado= 1;
+  int num, n= atoi((char *) dato);
+  for (num= 2; num<= n; num++) {
+    resultado= resultado* num;
+    printf ("Factorial de %d, resultado parcial %lld\n", n, resultado);
+    sleep (random() %3);
+  }
+  printf ("El factorial de %d es %lld\n", n, resultado);
+  pthread_exit(NULL);
+}
 
 int main (int argc, char *argv[]) {
-  srand(time(0)); 
-  if (argc== 2) {
-    printf ("El factorial de %s es %lld\n", argv[1], factorial (atoi (argv[1])));
+  srand(time(0));
+  pthread_t hilo1, hilo2;
+  if (argc!= 3) {
+    printf ("Ingresa dos números enteros.\n");
+    exit(0);
   }
+  pthread_create (&hilo1, NULL, factorial, (void *) argv[1]);
+  pthread_create (&hilo2, NULL, factorial, (void *) argv[2]);
+  pthread_join (hilo1, NULL);
+  pthread_join (hilo2, NULL);
   return 0;
 }
 
-long long int factorial (int n) {
-  long long int resultado= 1;
-  int num;
-  for (num= 2; num<= n; num++) {
-    resultado= resultado*num;
-    printf ("Factorial de %d, resultado parcial %lld\n", n, resultado);
-    sleep (random()%3);
-  }
-  return resultado;
-}
