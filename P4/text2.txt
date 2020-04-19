@@ -1,0 +1,17 @@
+This routine takes two arguments. The first is of type pthread t, and
+is used to specify which thread to wait for. This variable is initialized by
+the thread creation routine (when you pass a pointer to it as an argument
+to pthread create()); if you keep it around, you can use it to wait for
+that thread to terminate.
+The second argument is a pointer to the return value you expect to get
+back. Because the routine can return anything, it is defined to return a
+pointer to void; because the pthread join() routine changes the value
+of the passed in argument, you need to pass in a pointer to that value, not
+just the value itself.
+Let’s look at another example (Figure 27.2, page 4). In the code, a
+single thread is again created, and passed a couple of arguments via the
+myarg t structure. To return values, the myret t type is used. Once
+the thread is finished running, the main thread, which has been waiting
+inside of the pthread join() routine1
+, then returns, and we can access
+the values returned from the thread, namely whatever is in myret t.

@@ -1,0 +1,12 @@
+Finally, you might notice that the use of pthread create() to create
+a thread, followed by an immediate call to pthread join(), is a pretty
+strange way to create a thread. In fact, there is an easier way to accomplish this exact task; it’s called a procedure call. Clearly, we’ll usually be
+creating more than just one thread and waiting for it to complete, otherwise there is not much purpose to using threads at all.
+We should note that not all code that is multi-threaded uses the join
+routine. For example, a multi-threaded web server might create a number
+of worker threads, and then use the main thread to accept requests and
+pass them to the workers, indefinitely. Such long-lived programs thus
+may not need to join. However, a parallel program that creates threads
+to execute a particular task (in parallel) will likely use join to make sure
+all such work completes before exiting or moving onto the next stage of
+computation.
