@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <math.h>
 #include <pthread.h>
+#include <time.h>
 
 #define MAXLON 1000
 int mitadVector = 0, cont = 0;
@@ -53,7 +54,9 @@ int length_list() {
 }
 
 int main (int argc, char *argv[]) { 
-  
+  clock_t tiempo_inicio, tiempo_final;
+  double segundos;
+  tiempo_inicio = clock();
   if (argc!= 2) {
     printf ("Indica el nombre de un fichero.\n");
     exit(0);
@@ -65,6 +68,10 @@ int main (int argc, char *argv[]) {
   pthread_join (hilo2, NULL);
   sum = sumH1 + sumH2;
   printf("La suma de los elementos del archivo es: %d \n", sum);
+  tiempo_final = clock();
+  segundos = (double)(tiempo_final -tiempo_inicio ) / CLOCKS_PER_SEC; /*según que estes midiendo el tiempo en segundos es demasiado grande*/
+
+  printf("%f",segundos);
   return 0;
 }
 
